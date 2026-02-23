@@ -52,21 +52,32 @@ public class Misc
         reference.QueueFree();
     }
 
-public static Image LoadImageFromBuffer(byte[] buffer)
-    {
-        Image img = new Image();
-        foreach (var load in new Func<byte[], Error>[] {
-            img.LoadPngFromBuffer,
-            img.LoadJpgFromBuffer,
-            img.LoadWebpFromBuffer,
-            img.LoadBmpFromBuffer,
-        })
-        {
-            if (load(buffer) == Error.Ok)
-                return img;
-        }
+    public static Image LoadImageFromBuffer(byte[] buffer)
+{
+    if (buffer == null || buffer.Length < 4)
         return null;
+
+    Image img = new Image();
+    bool isPng = buffer[0] == 137 && buffer[1] == 80 && buffer[2] == 78 && buffer[3] == 71; //silences godot errors >:c
+
+    if (isPng)
+    {
+        if (img.LoadPngFromBuffer(buffer) == Error.Ok)
+            return img;
     }
+
+    foreach (var load in (Func<byte[], Error>[]) [
+        img.LoadJpgFromBuffer,
+        img.LoadWebpFromBuffer,
+        img.LoadBmpFromBuffer,
+    ])
+    {
+        if (load(buffer) == Error.Ok)
+            return img;
+    }
+
+    return null;
+}
 
     public static Color ParseColor(string hex, Color defColor)
     {
@@ -74,7 +85,7 @@ public static Image LoadImageFromBuffer(byte[] buffer)
 
         try
         {
-            hex.Trim();
+            hex = hex.Trim();
             if (!hex.StartsWith('#')) hex = "#" + hex;
             return Color.FromHtml(hex);
         }

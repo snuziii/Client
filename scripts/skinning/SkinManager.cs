@@ -182,10 +182,21 @@ public partial class SkinManager : Node
     }
 
 	private static ImageTexture loadTexture(string skinPath)
-	{
-		var settings = SettingsManager.Instance.Settings;
-		return ImageTexture.CreateFromImage(Image.LoadFromFile($"{Constants.USER_FOLDER}/skins/{settings.Skin.Value}/{skinPath}"));
-	}
+{
+    var settings = SettingsManager.Instance.Settings;
+    string path = $"{Constants.USER_FOLDER}/skins/{settings.Skin.Value}/{skinPath}";
+
+    if (!File.Exists(path))
+    {
+        string defaultPath = $"{Constants.USER_FOLDER}/skins/default/{skinPath}";
+        if (!File.Exists(defaultPath))
+            return null;
+        path = defaultPath;
+    }
+
+    Image image = Image.LoadFromFile(path);
+    return image != null ? ImageTexture.CreateFromImage(image) : null;
+}
 
 	private static byte[] loadSound(string skinPath)
 	{
