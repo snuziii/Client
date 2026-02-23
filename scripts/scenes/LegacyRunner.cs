@@ -1272,7 +1272,6 @@ public partial class LegacyRunner : BaseScene
 		}
 
 		CurrentAttempt.Stop();
-		SoundManager.Song.PitchScale = 1.0f;
 
 		if (!CurrentAttempt.IsReplay)
 		{
