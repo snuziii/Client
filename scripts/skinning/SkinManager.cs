@@ -154,9 +154,9 @@ public partial class SkinManager : Node
 
 			for (int i = 0; i < ValidHexs.Count; i++)
 			{
-				// split[i] = split[i].TrimPrefix("#").Substr(0, 6);
-				// split[i] = new Regex("[^a-fA-F0-9$]").Replace(split[i], "f");
-				colors[i] = Util.Misc.ParseColor(ValidHexs[i], Colors.White);
+				split[i] = split[i].TrimPrefix("#").Substr(0, 6);
+				split[i] = new Regex("[^a-fA-F0-9$]").Replace(split[i], "f");
+				colors[i] = Color.FromHtml(split[i]);
 			}
 
 			skin.NoteColors = colors;

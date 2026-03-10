@@ -280,7 +280,6 @@ public partial class SettingsMenu : ColorRect
 		void applyLineEdit()
         {
             double value = (lineEdit.Text == "" ? lineEdit.PlaceholderText : lineEdit.Text).ToFloat();
-            value = Math.Clamp(value, setting.Slider.MinValue, setting.Slider.MaxValue);
             if ((double)setting.GetVariant() != value) { setting.SetVariant(value); }
         }
 

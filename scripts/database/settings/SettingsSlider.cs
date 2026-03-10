@@ -7,4 +7,5 @@ public class SettingsSlider
     public float MaxValue { get; set; } = default;
 
     public float Step { get; set; } = default;
+    
 }

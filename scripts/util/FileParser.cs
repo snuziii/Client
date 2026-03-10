@@ -36,19 +36,9 @@ public class FileParser
         Buffer = buffer ?? Array.Empty<byte>();
         Pointer = 0;
     }
-    // some minor additional checks to prevent huge amounts of maps from being corrupt,
-    // would need a tester to see if this works with bigger map amounts.
-    private void checkBounds(int amount)
-    {
-        if (Pointer + amount > Length)
-        {
-            throw new EndOfStreamException($"Attempted to read {amount} bytes beyond stream length of {Length}.");
-        }
-    }
 
     public byte[] Get(int length)
     {
-        checkBounds(length);
         Pointer += length;
         return Buffer[(Pointer - length)..Pointer];
     }
@@ -89,48 +79,41 @@ public class FileParser
 
     public bool GetBool()
     {
-        checkBounds(1);
         Pointer += 1;
         return BitConverter.ToBoolean(Buffer, Pointer - 1);
     }
 
     public float GetFloat()
     {
-        checkBounds(4);
         Pointer += 4;
         return BitConverter.ToSingle(Buffer, Pointer - 4);
     }
 
     public double GetDouble()
     {
-        checkBounds(8);
         Pointer += 8;
         return BitConverter.ToDouble(Buffer, Pointer - 8);
     }
 
     public ushort GetUInt8()
     {
-        checkBounds(1);
         return Get(1)[0];
     }
 
     public ushort GetUInt16()
     {
-        checkBounds(2);
         Pointer += 2;
         return BitConverter.ToUInt16(Buffer, Pointer - 2);
     }
 
     public uint GetUInt32()
     {
-        checkBounds(4);
         Pointer += 4;
         return BitConverter.ToUInt32(Buffer, Pointer - 4);
     }
 
     public ulong GetUInt64()
     {
-        checkBounds(8);
         Pointer += 8;
         return BitConverter.ToUInt64(Buffer, Pointer - 8);
     }
